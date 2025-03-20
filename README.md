@@ -24,5 +24,7 @@ cd PyCharmMiscProject && python3 GUI.py
 The GUI consists of six buttons, a command line input, and a terminal output window.
 ### Run
 When pressed, this button will run the typed command in the CLI.
-### Run Image Attack
-Runs the image attack, as described under 
+### Start TCPDump
+Begins collecting packet capture data, storing it in a file with the name specified in the **Enter Filename** textbox. 
+### Stop TCPDump
+Stops the packet capture data and moves the file to the **Downloads** folder.
