@@ -21,7 +21,7 @@ The pod attack vector consists of a simple attack vector consisting of a bash sc
 cd PyCharmMiscProject && python3 GUI.py
 ```
 ## Using the GUI
-The GUI consists of six buttons, a command line input, and a terminal output window.
+The GUI consists of eight buttons, a command line input, and a terminal output window.
 ### Run
 When pressed, this button will run the typed command in the CLI.
 ### Start TCPDump
