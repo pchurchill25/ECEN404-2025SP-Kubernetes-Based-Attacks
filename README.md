@@ -28,3 +28,11 @@ When pressed, this button will run the typed command in the CLI.
 Begins collecting packet capture data, storing it in a file with the name specified in the **Enter Filename** textbox. 
 ### Stop TCPDump
 Stops the packet capture data and moves the file to the **Downloads** folder.
+### Run Image Attack
+Starts the image attack by calling the malicious image. The image will run, consuming roughly 85% of the CPU.
+### Run Node Attack
+Deploys the node attack yaml, which will eventaully crash the agent node.
+### Delete Node Attack
+Deletes the node attack.
+### Run Pod Attack
+### Show Kubectl Top Nodes
