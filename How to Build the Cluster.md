@@ -3,7 +3,7 @@ Instructions based off those found in the [RKE2 Quick Start Guide](https://docs.
 ## Sanity Checks
 1: Make sure the server and the agent node can `ping` each other's ip address.
 
-2: Sudo into the terminal by typing `sudo -s` and then entering the same password you used to log into `child3`
+2: Sudo into the terminal by typing `sudo -s` - the install process and the `kubectl` command won't work without sudo access.
 
 3: Make sure your computer is connected to the internet.
 ## Setting up the Server Node
