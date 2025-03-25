@@ -20,19 +20,28 @@ The pod attack vector consists of a simple attack vector consisting of a bash sc
 ```
 cd PyCharmMiscProject && python3 GUI.py
 ```
-## Using the GUI
+# Using the GUI
 The GUI consists of eight buttons, a command line input, and a terminal output window.
 ### Run
 When pressed, this button will run the typed command in the CLI.
 ### Start TCPDump
 Begins collecting packet capture data, storing it in a file with the name specified in the **Enter Filename** textbox. 
 ### Stop TCPDump
-Stops the packet capture data and moves the file to the **Downloads** folder.
+Stops the packet capture data and moves the file to the `Downloads` folder.
 ### Run Image Attack
 Starts the image attack by calling the malicious image. The image will run, consuming roughly 85% of the CPU.
 ### Run Node Attack
 Deploys the node attack yaml, which will eventaully crash the agent node.
 ### Delete Node Attack
-Deletes the node attack.
+Deletes the node attack yaml.
 ### Run Pod Attack
+Runs the pod, which will spam images to consume CPU.
 ### Show Kubectl Top Nodes
+Shows the output of the `kubectl top nodes` command, which displays nodes in the cluster and their CPU usage. Use to check if attacks are running properly.
+## Filename
+Enter the filename for the .pcap file, without the .pcap.
+## Terminal Command
+Enter the command to run when the **Run** button is pressed.
+## Terminal Output
+Displays the output for the terminal command.
+
