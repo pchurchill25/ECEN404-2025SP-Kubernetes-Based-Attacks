@@ -30,7 +30,7 @@ journalctl -u rke2-server -f
 ```
 Make sure to run this on a seperate terminal so it doesn't interrupt the server node starting.
 
-### 5: Copy the token to the agent node.
+### 5: Copy the token from `/var/lib/rancher/rke2/server/node-token` to the agent node.
 
 
 ### 6: Move the `kubeconfig` file
@@ -40,7 +40,7 @@ nano ~/.bashrc
 ```
 Then, paste the following text into the file:
 ```
-
+export KUBECONFIG=/etc/rancher/rke2/rke2.yaml PATH=$PATH:/var/lib/rancher/rke2/bin
 ```
 Restart the computer:
 ```
@@ -71,4 +71,13 @@ Paste the following text into the file:
 server: https://<server>:9345
 token: <token from server node>
 ```
-Replace `<server>` with the ip address of the server node's computer.
+Replace `<server>` with the ip address of the server node's computer and paste the token from the server node.
+
+### 4: Start the service:
+```
+systemctl start rke2-agent.service
+```
+### 5: Follow the logs in a serperate terminal:
+```
+journalctl -u rke2-agent -f
+```
