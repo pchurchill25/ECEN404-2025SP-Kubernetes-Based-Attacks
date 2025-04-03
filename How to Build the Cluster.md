@@ -105,3 +105,6 @@ kubectl get services
 ```
 <server node ip address>:<service ip address>
 ```
+# Setting up the Image Attack
+
+
