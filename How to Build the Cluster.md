@@ -106,5 +106,10 @@ kubectl get services
 <server node ip address>:<service ip address>
 ```
 # Setting up the Image Attack
+1: Make sure both the `Dockerfile` and `gpu_workload.py` files are in the same folder.
 
-
+2: Build the docker image:
+```
+docker build -t hw .
+```
+This will set up an image called `hw`, which the GUI will run as part of the image attack. If you wish to change the name of the image, make sure to also change the image being called with the `docker run hw` command in the GUI.
