@@ -35,7 +35,7 @@ Deploys the node attack yaml, which will eventaully crash the agent node.
 ### Delete Node Attack
 Deletes the node attack yaml.
 ### Run Pod Attack
-Runs the pod, which will spam containers to consume CPU and memory and slow the system dow.
+Executes the pod attack, which will spam containers to consume CPU and memory and slow the system down. The button is a toggle-style switch so pressing the same button again after execution will stop the pod attack.
 ### Show Kubectl Top Nodes
 Shows the output of the `kubectl top nodes` command, which displays nodes in the cluster and their CPU usage. Use to check if attacks are running properly.
 ## Filename
