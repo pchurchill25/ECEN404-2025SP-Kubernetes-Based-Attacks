@@ -4,7 +4,7 @@ Kubernetes Based Attacks is a senior design project that simulates a Kubernetes 
 ### Cluster Overview
 The cluster consists of a server node running on child3 and an agent node running on child2. The cluster has a [PHP Guestbook](https://kubernetes.io/docs/tutorials/stateless-application/guestbook/) and a camera feed running on it as well.
 ### Image Attack
-The image attack simulates a cryptominer being installed on the computer via malicous image download by forcing the computer to multiply large matricies over a set duration.
+The image attack simulates a cryptominer being installed on the computer via malicous image download by forcing the computer to multiply large matricies.
 ### Node Attack
 The node attack involves deploying a large number of API-DoS-Deployment pods to stress the RKE2 cluster’s API server. From the server node, the attack infinitely sends pods containing small requests to the agent node. This attack quickly increases CPU and memory usage, crashing the agent node.
 ### Pod Attack
@@ -28,7 +28,7 @@ When pressed, this button will run the typed command in the CLI.
 Begins collecting packet capture data, storing it in a file with the name specified in the **Enter Filename** textbox. 
 ### Stop TCPDump
 Stops the packet capture data and moves the file to the `Downloads` folder.
-### Run Image Attack
+### Run/Stop Image Attack
 Starts the image attack by calling the malicious image. The image will run, consuming roughly 85% of the CPU.
 ### Run Node Attack
 Deploys the node attack yaml, which will eventaully crash the agent node.
