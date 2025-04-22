@@ -77,7 +77,8 @@ class KubectlTopNodesWindow(QWidget):
                 # Write CSV headers
                 with open(self.csv_filename, mode='w', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(["Timestamp", "Node", "CPU(cores)", "Memory(bytes)"])
+                    writer.writerow(["Timestamp", "Node", "CPU (cores)", "CPU (%)", "Memory (bytes)", "Memory (%)"])
+
             else:
                 # User canceled
                 return
@@ -97,15 +98,23 @@ class KubectlTopNodesWindow(QWidget):
             lines = output.strip().split('\n')
             if len(lines) > 1:
                 headers = lines[0].split()
+                timestamped_headers = ["Timestamp"] + headers
+
+                # Only write headers once (if file is empty)
+                if os.path.getsize(self.csv_filename) == 0:
+                    with open(self.csv_filename, mode='a', newline='') as file:
+                        writer = csv.writer(file)
+                        writer.writerow(timestamped_headers)
+
                 for line in lines[1:]:
                     if line.strip():
                         parts = line.split()
-                        if len(parts) >= 3:
-                            node, cpu, mem = parts[0], parts[1], parts[2]
+                        if len(parts) >= len(headers):
                             timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                            row = [timestamp] + parts
                             with open(self.csv_filename, mode='a', newline='') as file:
                                 writer = csv.writer(file)
-                                writer.writerow([timestamp, node, cpu, mem])
+                                writer.writerow(row)
 
 
 class NodeAttackToggle(QWidget):
