@@ -14,8 +14,7 @@ from PyQt5.QtCore import Qt
 
 
 
-#trying to execute the TCP dump
-class CommandExecutor(QThread):
+class CommandExecutor(QThread): # this function allows us to run commands in a background process so they don't freeze the GUI.
     command_output_signal = pyqtSignal(str)
 
     def __init__(self, command):
@@ -30,7 +29,7 @@ class CommandExecutor(QThread):
             self.command_output_signal.emit(f"Error: {e}")
 
 
-class KubectlTopNodesWindow(QWidget):
+class KubectlTopNodesWindow(QWidget): # this class shows the kubectl top nodes output in a window
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Kubectl Top Nodes Output")
@@ -58,7 +57,7 @@ class KubectlTopNodesWindow(QWidget):
         self.recordButton.clicked.connect(self.toggle_recording)
         layout.addWidget(self.recordButton)
 
-    def toggle_recording(self):
+    def toggle_recording(self):    # this function saves a CSV of the kubectl top nodes data 
         if not self.recording_enabled:
             # Ask user to choose file path
             options = QFileDialog.Options()
@@ -86,12 +85,12 @@ class KubectlTopNodesWindow(QWidget):
             self.recording_enabled = False
             self.recordButton.setText("Start Recording")
 
-    def run_top_nodes(self):
+    def run_top_nodes(self): #function to actually open the KTN window
         self.executor = CommandExecutor("kubectl top nodes")
         self.executor.command_output_signal.connect(self.update_output)
         self.executor.start()
 
-    def update_output(self, output):
+    def update_output(self, output): #actually writes to the csv. 
         self.outputDisplay.setPlainText(output)
 
         if self.recording_enabled:
@@ -117,7 +116,7 @@ class KubectlTopNodesWindow(QWidget):
                                 writer.writerow(row)
 
 
-class NodeAttackToggle(QWidget):
+class NodeAttackToggle(QWidget): #allows node attack button to switch from start to stop.
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Toggle Node Attack")
@@ -136,7 +135,7 @@ class NodeAttackToggle(QWidget):
         layout.addWidget(self.output_box)
         self.setLayout(layout)
 
-    def toggle_attack(self):
+    def toggle_attack(self): #actually toggles the button.
         if not self.toggle_state:
             # Start attack
             command = "kubectl apply -f api-dos-deployment.yaml"
@@ -155,7 +154,7 @@ class NodeAttackToggle(QWidget):
     def display_output(self, output):
         self.output_box.append(output)
 
-class ContainerCountWindow(QWidget):
+class ContainerCountWindow(QWidget): #window to display container count during pod attack
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Active Container Count")
@@ -171,7 +170,7 @@ class ContainerCountWindow(QWidget):
         self.containerTimer.timeout.connect(self.updateContainerCount)
         self.containerTimer.start(1000)  # Update every second
 
-    def updateContainerCount(self):
+    def updateContainerCount(self): #updates container count
         try:
             result = subprocess.run("docker ps -q --filter 'ancestor=spam_container_image' | wc -l",
                                     shell=True, capture_output=True, text=True)
@@ -180,12 +179,12 @@ class ContainerCountWindow(QWidget):
         except Exception as e:
             self.containerCountLabel.setText("Error Fetching Count")
 
-    def closeEvent(self, event):
+    def closeEvent(self, event): #stops the timer
         """ Stop the timer when the window is closed """
         self.containerTimer.stop()
         event.accept()
 
-class MyApp(QWidget):
+class MyApp(QWidget): # this is the core body of code.
     def __init__(self):
         super().__init__()
         self.image_attack_running = False
@@ -221,7 +220,7 @@ class MyApp(QWidget):
         attackRow.addStretch()
         layout.addLayout(attackRow)
 
-        # Second row: Data Collection Controls
+        # Second row: Data Collection BUttons
         self.label = QLabel("Enter Filename (without .pcap):")
 
         dataLabel = QLabel("Data Collection")
@@ -235,28 +234,31 @@ class MyApp(QWidget):
         dataRow.addStretch()
         layout.addLayout(dataRow)
 
+        #tcpdump instructions
         self.label = QLabel("Enter Filename (without .pcap):")
         layout.addWidget(self.label)
-
+        
+        #tcpdump line to type filename
         self.filenameInput = QLineEdit()
         layout.addWidget(self.filenameInput)
 
+        #label for terminal command
         self.label = QLabel("Enter Terminal Command:")
         layout.addWidget(self.label)
 
+        #line to type out a command to run on the terminal
         self.editorCommand = QPlainTextEdit()
         layout.addWidget(self.editorCommand)
 
-        #area to type in filename
-
-        #set filename
-
+        #labels terminal output box
         self.label = QLabel("Terminal Output:")
         layout.addWidget(self.label)
 
+        #creates box to display terminal output
         self.editorOutput = QPlainTextEdit()
         layout.addWidget(self.editorOutput, 7)
 
+        #adds button to run terminal commands
         self.button_run = QPushButton('&run', clicked=self.runcommand)
         dataLayout.addWidget(self.button_run)
 #tcpdump run button
@@ -269,11 +271,7 @@ class MyApp(QWidget):
         self.imageToggleButton = QPushButton("Run Image Attack", clicked=self.toggle_image_attack)
         attackButtonLayout.addWidget(self.imageToggleButton)
 
-        #self.imageButton = QPushButton("Run Image Attack", clicked=self.runimage)
-       # attackButtonLayout.addWidget(self.imageButton)
-
-        #self.imageStopButton = QPushButton("Stop Image Attack", clicked=self.stopimage)
-        #attackButtonLayout.addWidget(self.imageStopButton)
+#NOde attack run button
         self.nodeToggleButton = QPushButton("Start Node Attack", clicked=self.toggle_node_attack)
         attackButtonLayout.addWidget(self.nodeToggleButton)
 
@@ -300,7 +298,7 @@ class MyApp(QWidget):
             self.nodeToggleButton.setText("Start Node Attack")
 
         self.node_attack_running = not self.node_attack_running
-
+    
         self.executor = CommandExecutor(command)
         self.executor.command_output_signal.connect(self.update_output)
         self.executor.start()
@@ -314,7 +312,7 @@ class MyApp(QWidget):
             self.stopimage()
             self.imageToggleButton.setText("Run Image Attack")
             self.image_attack_running = False
-
+#function to show KTN output
     def show_kubectl_top_nodes(self):
         self.kubectlWindow = KubectlTopNodesWindow()
         self.kubectlWindow.show()
@@ -331,19 +329,19 @@ class MyApp(QWidget):
         )
 
         self.execute_command_in_background(full_command)
-
+#function to run commands in backgorund process to not freeze GUI
     def execute_command_in_background(self, command):
         self.executor = CommandExecutor(command)
         self.executor.command_output_signal.connect(self.update_output)
         self.executor.start()
-
+#stops pcap caputure
     def stop_tcpdump(self):
         stop_command = "kubectl exec -it tcpdump-pod -- pkill -f tcpdump"
         self.execute_command_in_background(stop_command)
 
         # Add a short delay to ensure tcpdump stops before copying the file
         self.executor.finished.connect(self.copy_pcap_file)
-
+#saves pcap file
     def copy_pcap_file(self):
         filename = self.filenameInput.text().strip()
         if not filename:
@@ -352,10 +350,10 @@ class MyApp(QWidget):
 
         copy_command = f"kubectl cp tcpdump-pod:/tmp/{filename}.pcap /home/child3/Downloads/{filename}.pcap"
         self.execute_command_in_background(copy_command)
-
+#updates terminal output
     def update_output(self, output):
         self.editorOutput.insertPlainText(output + "\n")
-
+#runs terminal command
     def runcommand(self):
         command_line = self.editorCommand.toPlainText().strip()
         p = os.popen(command_line)
@@ -390,7 +388,7 @@ class MyApp(QWidget):
         else:
             self.editorOutput.insertPlainText("Real image called\n")
 
-
+#stops image attack nby deleting container
     def stopimage(self):
         if self.image_container_id:
             stop_command = f"docker stop {self.image_container_id}"
@@ -405,7 +403,7 @@ class MyApp(QWidget):
         else:
             self.editorOutput.insertPlainText("No image attack is currently running.\n")
 
-
+#runs node attack
     def runNode(self):
 
             command_imge = "kubectl apply -f api-dos-deployment.yaml"  # ).toPlainText().strip()
@@ -416,7 +414,7 @@ class MyApp(QWidget):
                 self.editorOutput.clear()
                 output = txt.read()
                 self.editorOutput.insertPlainText(output)
-
+#deletes node attack
     def deleteNode(self):
 
         command_imge = "kubectl delete -f api-dos-deployment.yaml"  # ).toPlainText().strip()
@@ -437,7 +435,7 @@ class MyApp(QWidget):
             self.stopPod()
             self.podToggleButton.setText("Run Pod Attack")
             self.pod_attack_running = False
-
+#run pod attack in background
     def runPod(self):
         if self.pod_process is None:
             self.pod_process = subprocess.Popen(["bash", "cont_flood.sh"], stdout=subprocess.PIPE,
@@ -451,7 +449,7 @@ class MyApp(QWidget):
 
         else:
             self.editorOutput.insertPlainText("Pod attack is already running!\n")
-
+#stop pod attack
     def stopPod(self):
         if self.pod_process is not None:
             self.pod_process.terminate()  # Try to terminate gracefully
@@ -492,7 +490,7 @@ class MyApp(QWidget):
 
         self.editorOutput.insertPlainText("Pod attack containers, processes, and image deleted.\n")
 
-
+#runs the actaul GUI
 if __name__ == '__main__':
     # don't auto scale when drag app to a different monitor.
     # QApplication.setAttribute(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
